@@ -1,0 +1,25 @@
+<!-- app/templates/update_player.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Player</title>
+</head>
+<body>
+    <h1>Update Player</h1>
+    <form method="POST">
+        <label for="username">Username:</label>
+        <input type="text" name="username" value="{{ player.username }}" required><br>
+        <label for="country">Country:</label>
+        <input type="text" name="country" value="{{ player.country }}" required><br>
+        <label for="team">Team:</label>
+        <input type="text" name="team" value="{{ player.team }}"><br>
+        <label for="region">Region:</label>
+        <input type="text" name="region" value="{{ player.region }}" required><br>
+        <label for="role">Role:</label>
+        <input type="text" name="role" value="{{ player.role }}" required><br>
+        <label for="rank">Rank:</label>
+        <input type="text" name="rank" value="{{ player.rank }}" required><br>
+        <button type="submit">Update Player</button>
+    </form>
+</body>
+</html>

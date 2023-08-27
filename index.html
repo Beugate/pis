@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Player List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Player List</h1>
+        <div class="button-container">
+            <a class="add-player-button" href="{{ url_for('add_player') }}">Add Player</a>
+        </div>
+        <table class="player-table">
+            <tr>
+                <th>ID</th>
+                <th>Region</th>
+                <th>Country</th>
+                <th>Rank</th>
+                <th>Username</th>
+                <th>Team</th>
+                <th>Role</th>
+                <th>Actions</th>
+            </tr>
+            {% for player in players %}
+                <tr>
+                    <td>{{ player.id }}</td>
+                    <td>{{ player.region }}</td>
+                    <td>{{ player.country }}</td>
+                    <td>{{ player.rank }}</td>
+                    <td><a class="username-link" href="{{ url_for('view_player', player_id=player.id) }}">{{ player.username }}</a></td>
+                    <td>{{ player.team }}</td>
+                    <td>{{ player.role }}</td>
+                    <td class="actions-column">
+                        <a class="edit-button" href="{{ url_for('update_player', player_id=player.id) }}">Edit</a>
+                        <form class="delete-form" action="{{ url_for('delete_player', player_id=player.id) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this player?')">
+                            <button class="delete-button" type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    
+    <!-- Graph Container -->
+    <div class="graph-container">
+        <h2>Player Regions Distribution</h2>
+        <canvas id="bar-chart"></canvas>
+    </div>
+    
+    <script>
+        function createGraph() {
+            fetch('/data_for_graph')
+                .then(response => response.json())
+                .then(data => {
+                    const ctx = document.getElementById('bar-chart').getContext('2d');
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: data.labels,
+                            datasets: [{
+                                label: 'Player Count',
+                                data: data.values,
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false
+                        }
+                    });
+                });
+        }
+
+        window.onload = createGraph;
+    </script>
+</body>
+</html>
